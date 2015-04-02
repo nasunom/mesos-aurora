@@ -4,6 +4,7 @@ MAINTAINER nasuno@ascade.co.jp
 RUN apt-get update && \
     apt-get -y install \
       curl \
+      wget \
       git \
       libapr1-dev \
       libcurl4-openssl-dev \
@@ -18,7 +19,7 @@ RUN apt-get update && \
 update-alternatives --set java /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
 
 # Docker
-RUN curl -sSL https://get.docker.com/ubuntu/ | sudo sh
+RUN wget -qO- https://get.docker.com/ | sh
 
 # Aurora
 RUN git clone https://github.com/apache/incubator-aurora.git /aurora
