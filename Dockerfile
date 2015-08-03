@@ -16,7 +16,7 @@ RUN apt-get update && \
       zookeeper
 
 # Ensure java 7 is the default java.
-update-alternatives --set java /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
+RUN update-alternatives --set java /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
 
 # Docker
 RUN wget -qO- https://get.docker.com/ | sh
