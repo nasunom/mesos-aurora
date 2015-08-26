@@ -13,7 +13,7 @@ setup_master() {
     --ip=$MY_HOST \
     --work_dir=/usr/local/aurora/master/db \
     --quorum=1 \
-    >/tmp/mesos-master-console.log 2>&1 &
+    >/tmp/mesos.log 2>&1 &
 
   rm -rf /usr/local/aurora/master /var/db/aurora/*
   mesos-log initialize --path="/var/db/aurora"
@@ -74,7 +74,7 @@ setup_slave() {
     --resources="cpus:$MESOS_CPUS;mem:$MESOS_MEM;disk:$MESOS_DISK" \
     --work_dir="/var/lib/mesos" \
     --containerizers=docker,mesos \
-    >/tmp/mesos-slave-console.log 2>&1 &
+    >/tmp/mesos.log 2>&1 &
 
   # thermos-observer
   exec /aurora/dist/thermos_observer.pex \
@@ -102,4 +102,6 @@ else
   setup_master
 fi
 
-/usr/sbin/sshd -D
+#/usr/sbin/sshd -D
+tail -f /tmp/mesos.log
+
