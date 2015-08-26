@@ -25,7 +25,7 @@ RUN wget -qO- https://get.docker.com/ | sh
 
 # Aurora
 RUN git clone -b 0.9.0 https://github.com/apache/aurora.git /aurora
-ENV MESOS_VERSION 0.22.0
+ENV MESOS_VERSION 0.23.0
 RUN mkdir -p /aurora/third_party
 ADD https://svn.apache.org/repos/asf/aurora/3rdparty/ubuntu/trusty64/python/mesos.native-${MESOS_VERSION}-py2.7-linux-x86_64.egg /aurora/third_party/
  
