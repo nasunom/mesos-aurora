@@ -9,13 +9,13 @@ RUN apt-get update && apt-get -y install \
       wget \
       git \
       libapr1-dev \
-      libcurl4-openssl-dev \
+      libcurl4-nss-dev \
       libsasl2-dev \
       libsvn-dev \
       openjdk-8-jdk \
       openssh-server \
       python-dev \
-      zookeeper
+      zookeeperd
 
 # Ensure java 8 is the default java.
 RUN update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
@@ -24,7 +24,7 @@ RUN update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/jav
 RUN wget -qO- https://get.docker.com/ | sh
 
 # Aurora
-RUN git clone -b 0.9.0 https://github.com/apache/aurora.git /aurora
+RUN git clone git://git.apache.org/aurora.git /aurora
 ENV MESOS_VERSION 0.23.0
 RUN mkdir -p /aurora/third_party
 ADD https://svn.apache.org/repos/asf/aurora/3rdparty/ubuntu/trusty64/python/mesos.native-${MESOS_VERSION}-py2.7-linux-x86_64.egg /aurora/third_party/

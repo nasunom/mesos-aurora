@@ -2,9 +2,8 @@
 
 setup_master() {
   # zookeeper
-  rm -rf /var/lib/zookeeper/version-2 /var/lib/zookeeper/zookeeper_server.pid
-  export JVMFLAGS='-Djava.net.preferIPv4Stack=true'
-  /usr/share/zookeeper/bin/zkServer.sh start
+  rm -rf /var/lib/zookeeper/version-2
+  service zookeeper start
 
   # mesos-master
   export LD_LIBRARY_PATH=/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server
@@ -28,7 +27,7 @@ setup_master() {
 
   cd $DIST_DIR/install/aurora-scheduler
   exec ./bin/aurora-scheduler \
-    -cluster_name=example \
+    -cluster_name=devcluster \
     -hostname=$MY_HOST \
     -http_port=8081 \
     -native_log_quorum_size=1 \
@@ -44,10 +43,10 @@ setup_master() {
     -logtostderr \
     -allowed_container_types=MESOS,DOCKER \
     -global_container_mounts=$GLOBAL_CONTAINER_MOUNTS \
-    -http_authentication_mechanism=BASIC \
     -use_beta_db_task_store=true \
-    -shiro_ini_path=etc/shiro.example.ini \
     -enable_h2_console=true \
+    -tier_config=/aurora/src/test/resources/org/apache/aurora/scheduler/tiers-example.json \
+    -receive_revocable_resources=true \
     >/tmp/aurora_scheduler-console.log 2>&1 &
 }
 
@@ -87,7 +86,8 @@ setup_slave() {
 
 ####
 
-export MY_HOST=$(ifconfig eth0|grep 'inet addr'|awk '{print $2}'|awk -F: '{print $2}')
+export MY_HOST_IF=${MY_HOST_IF:-eth0}
+export MY_HOST=$(ifconfig $MY_HOST_IF|grep 'inet addr'|awk '{print $2}'|awk -F: '{print $2}')
 export ZK_HOST=${ZK_HOST:-$MY_HOST}
 hostname $MY_HOST
 sed "1i $MY_HOST    $MY_HOST" /etc/hosts > /tmp/hosts; cp /tmp/hosts /etc/hosts
